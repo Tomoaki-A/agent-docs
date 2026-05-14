@@ -19,6 +19,7 @@
     "typescript": "^5.0.0",
     "vitest": "^3.0.0"
   },
+  "packageManager": "pnpm@10.27.0",
   "license": "MIT",
   "pnpm": {
     "onlyBuiltDependencies": ["esbuild"]
