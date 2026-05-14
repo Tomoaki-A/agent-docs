@@ -1,0 +1,23 @@
+{
+  "name": "agent-docs",
+  "version": "1.0.0",
+  "description": "Claude Code skills and agent documentation for projects",
+  "bin": {
+    "agent-docs-update": "./bin/update.js"
+  },
+  "files": [
+    "bin/",
+    "docs/",
+    "CLAUDE.md"
+  ],
+  "scripts": {
+    "build": "tsc && node scripts/add-shebang.cjs",
+    "test": "vitest run"
+  },
+  "devDependencies": {
+    "@types/node": "^22.0.0",
+    "typescript": "^5.0.0",
+    "vitest": "^3.0.0"
+  },
+  "license": "MIT"
+}
