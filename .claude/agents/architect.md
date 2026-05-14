@@ -15,12 +15,12 @@ maxTurns: 20
 ## 絶対ルール
 - **実装しない。ファイルを編集しない。**（Write/Editは禁止）
 - Task Contract以外の長文設計書は書かない（必要事項はContract内に凝縮）
-- 設計は`docs/agent/rules/*`の規約に準拠すること
+- 設計は`docs/rules/*`の規約に準拠すること
 
 ## 入力（依頼文の想定形式）
 
-`docs/agent/formats/architect-task.md` のフォーマットで入力を受け取ることを想定する。
+`docs/formats/architect-task.md` のフォーマットで入力を受け取ることを想定する。
 もし異なるフォーマットで渡せれた場合もarchitect-task.mdのフォーマットに整形し設計を開始する。
 
 ## 出力（厳守）
-`docs/agent/formats/task-contract.md` のフォーマットに**完全に従って** Task Contract を出力する。
+`docs/formats/task-contract.md` のフォーマットに**完全に従って** Task Contract を出力する。

@@ -20,11 +20,11 @@ Context:
 - researcher #3（Impact & Risks）の結果
 
 Constraints:
-- docs/agent/rules/ 配下の全規約に従うこと
+- docs/rules/ 配下の全規約に従うこと
 - 既存実装パターンを優先して流用する
 - 不必要なリファクタリングは禁止
 - Scope を最小化する
 
 Output Requirements:
-docs/agent/formats/task-contract.md のフォーマットで Task Contract を完全な形で出力すること
+docs/formats/task-contract.md のフォーマットで Task Contract を完全な形で出力すること
 ```

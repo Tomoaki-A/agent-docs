@@ -30,5 +30,5 @@ Task Contract（architect が出力した設計契約）
 - researcher #3（Impact & Risks）の結果サマリー
 
 ## Output Requirements:
-docs/agent/formats/design-review-result.md のフォーマットで結果を出力すること
+docs/formats/design-review-result.md のフォーマットで結果を出力すること
 ```

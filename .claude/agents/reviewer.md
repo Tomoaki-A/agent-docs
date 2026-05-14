@@ -21,7 +21,7 @@ maxTurns: 20
 
 ## 入力（依頼文の想定形式）
 
-`docs/agent/formats/reviewer-task.md` のフォーマットで入力を受け取ることを想定する。
+`docs/formats/reviewer-task.md` のフォーマットで入力を受け取ることを想定する。
 もし異なるフォーマットで渡された場合も、reviewer-task.md のフォーマットに整形してからレビューを開始する。
 
 ## レビュー手順
@@ -34,4 +34,4 @@ maxTurns: 20
 
 ## 出力
 
-`docs/agent/formats/reviewer-result.md` のフォーマットで結果を報告すること。
+`docs/formats/reviewer-result.md` のフォーマットで結果を報告すること。

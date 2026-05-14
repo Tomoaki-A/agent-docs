@@ -24,10 +24,10 @@ Acceptance Criteria:
 
 Constraints:
 <守るべき制約条件。コーディング規約・設計方針・禁止事項など>
-- docs/agent/rules/ 配下の全規約に従うこと
+- docs/rules/ 配下の全規約に従うこと
 - Scope 外のファイルを変更しないこと
 - 不必要なリファクタリングをしないこと
 
 Output Requirements:
-docs/agent/formats/engineer-result.md のフォーマットで結果を報告すること
+docs/formats/engineer-result.md のフォーマットで結果を報告すること
 ```

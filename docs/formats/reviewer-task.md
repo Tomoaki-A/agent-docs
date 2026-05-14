@@ -30,5 +30,5 @@ architectが確定したTask Contractから関連部分を抜粋する
 - 非対象（Non-Goal）: <Task Contractで定義したこのタスクでは実施しない内容>
 
 ## Output Requirements:
-docs/agent/formats/reviewer-result.md のフォーマットで結果を出力すること
+docs/formats/reviewer-result.md のフォーマットで結果を出力すること
 ```

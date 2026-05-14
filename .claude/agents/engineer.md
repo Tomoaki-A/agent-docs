@@ -9,7 +9,7 @@ maxTurns: 50
 
 ## 入力（依頼文の想定形式）
 
-`docs/agent/formats/engineer-task.md` のフォーマットで入力を受け取ることを想定する。
+`docs/formats/engineer-task.md` のフォーマットで入力を受け取ることを想定する。
 もし異なるフォーマットで渡された場合も、engineer-task.md のフォーマットに整形してから実装を開始する。
 
 ## 実行ルール
@@ -17,7 +17,7 @@ maxTurns: 50
 - Engineer Task のフォーマットで渡された指示のみを実装する
 - Task Contract の Scope 外のファイルを変更しない
 - 不必要なリファクタリングをしない
-- `docs/agent/rules/` 配下の全規約に従う
+- `docs/rules/` 配下の全規約に従う
 
 ---
 
@@ -61,4 +61,4 @@ pnpm db:migrate
 
 ## 出力
 
-`docs/agent/formats/engineer-result.md` のフォーマットで結果を報告すること。
+`docs/formats/engineer-result.md` のフォーマットで結果を報告すること。

@@ -5,7 +5,7 @@ export const MARKER_START = '<!-- agent-docs:start -->'
 export const MARKER_END = '<!-- agent-docs:end -->'
 export const IGNORE = ['.DS_Store', 'settings.local.json']
 export const SKIP_IF_EXISTS = [
-  path.join('docs', 'agent', 'rules', 'projects.md'),
+  path.join('docs', 'rules', 'projects.md'),
 ]
 
 export function mergeClaude(srcPath: string, destPath: string): void {

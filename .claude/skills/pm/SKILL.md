@@ -101,7 +101,7 @@ Quick scan result:
 
 実行方針：
 researcherサブエージェントを**3インスタンス**並列で起動する。
-[docs/agent/formats/research-task.md](../../../docs/agent/formats/research-task.md) のフォーマットに情報を埋めて渡す。
+[docs/formats/research-task.md](../../../docs/formats/research-task.md) のフォーマットに情報を埋めて渡す。
 
 並列起動（すべてバックグラウンド）：
 
@@ -159,12 +159,12 @@ researcher #3（リスク）の結果をもとに以下を分類する：
 
 #### Step 1-1: architect サブエージェントを起動
 
-architectサブエージェントを起動し、Step 0で調査した結果をもとに[docs/agent/formats/architect-task.md](../../../docs/agent/formats/architect-task.md) のフォーマットに情報を埋めて渡す。
+architectサブエージェントを起動し、Step 0で調査した結果をもとに[docs/formats/architect-task.md](../../../docs/formats/architect-task.md) のフォーマットに情報を埋めて渡す。
 
 `User Request` にはユーザーの要求を原文のまま記述すること（要約・解釈を加えない）。
 
 #### Step 1-2: architect の出力要件（Task Contract）
-architect は必ず [docs/agent/formats/task-contract.md](../../../docs/agent/formats/task-contract.md) のフォーマットで Task Contract を出力する。
+architect は必ず [docs/formats/task-contract.md](../../../docs/formats/task-contract.md) のフォーマットで Task Contract を出力する。
 
 #### Step 1-3: Task Contractの確定
 architectサブエージェントが出力した Task Contractを読み、以下を必ず確認する
@@ -204,7 +204,7 @@ Task Contract を正式な設計として採用し、Step 2（設計レビュー
 
 #### Step 2-1: reviewer を3本並列起動する
 
-[docs/agent/formats/design-review-task.md](../../../docs/agent/formats/design-review-task.md) のフォーマットに情報を埋めて、以下の3インスタンスをすべてバックグラウンドで同時起動する。
+[docs/formats/design-review-task.md](../../../docs/formats/design-review-task.md) のフォーマットに情報を埋めて、以下の3インスタンスをすべてバックグラウンドで同時起動する。
 
 **Context（全インスタンス共通）**
 - ユーザー要求（元のリクエスト）
@@ -234,8 +234,8 @@ Task Contract の Work Items がGoal を達成するのに十分かを確認す�
 
 ```
 レビュー観点:
-docs/agent/rules/ 配下に定義されている設計規約・プロジェクト構造に設計が準拠しているか確認する。
-- ファイル配置が docs/agent/rules/structure.md の規約に従っているか（ui/ / domain/ / data/ の責務分離）
+docs/rules/ 配下に定義されている設計規約・プロジェクト構造に設計が準拠しているか確認する。
+- ファイル配置が docs/rules/structure.md の規約に従っているか（ui/ / domain/ / data/ の責務分離）
 - 設計原則（SOLID/DRY/KISS）に準拠しているか
 - 既存のコンポーネント・パターンを適切に流用しているか（不要な再実装がないか）
 - Server/Client 境界の設計が適切か
@@ -358,7 +358,7 @@ Parallel Plan に不備がある場合（同一ファイルが複数 items に�
 
 #### Step 3-3: engineer に渡す Engineer Task ブロック
 
-各 engineer には [docs/agent/formats/engineer-task.md](../../../docs/agent/formats/engineer-task.md) のフォーマットに情報を埋めて渡す。
+各 engineer には [docs/formats/engineer-task.md](../../../docs/formats/engineer-task.md) のフォーマットに情報を埋めて渡す。
 
 ---
 
@@ -394,7 +394,7 @@ Parallel Plan に不備がある場合（同一ファイルが複数 items に�
 
 起動前に、全 engineer result の `変更ファイル（Changed Files）` セクションを統合して変更ファイル一覧を作成する。
 
-[docs/agent/formats/reviewer-task.md](../../../docs/agent/formats/reviewer-task.md) のフォーマットに情報を埋めて、以下の6インスタンスをすべてバックグラウンドで同時起動する。
+[docs/formats/reviewer-task.md](../../../docs/formats/reviewer-task.md) のフォーマットに情報を埋めて、以下の6インスタンスをすべてバックグラウンドで同時起動する。
 
 **Context（全インスタンス共通）**
 - ユーザー要求（元のリクエスト）
@@ -423,7 +423,7 @@ Scope 外の変更混入・要件漏れ・DoD 未達を検出する
 
 ```
 レビュー観点:
-docs/agent/rules/` 配下に定義されているコーディング規約に準拠しているか確認する。
+docs/rules/` 配下に定義されているコーディング規約に準拠しているか確認する。
 - import 文の順序・パスエイリアス（@/）の使い方が既存コードと一致しているか
 
 レビューの目的:
@@ -436,7 +436,7 @@ docs/agent/rules/` 配下に定義されているコーディング規約に準�
 
 ```
 レビュー観点:
-docs/agent/rules/` 配下に定義されている設計規約にに準拠しているか確認する。
+docs/rules/` 配下に定義されている設計規約にに準拠しているか確認する。
 - ドメイン型の正しい参照・UI とビジネスロジックの責務分離・設計原則（SOLID/DRY）・コンポーネント粒度が既存パターンと整合しているか確認する。
 - ドメイン型（domain/ 配下）を正しく参照・利用しているか
 - UI コンポーネントとビジネスロジックの責務が混在していないか
@@ -490,7 +490,7 @@ docs/agent/rules/` 配下に定義されている設計規約にに準拠して�
 
 ```
 レビュー観点:
-docs/agent/rules/` 配下に定義されている設計規約にに準拠しているか確認する。
+docs/rules/` 配下に定義されている設計規約にに準拠しているか確認する。
 画面表示の一貫性・スタイルの統一性を確認する。
 - 同じ役割のテキスト（見出し・ラベル・本文等）でフォントサイズが揃っているか
 - 表記揺れがないか（同一概念に対して異なる表現が混在していないか）

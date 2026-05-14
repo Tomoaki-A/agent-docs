@@ -14,7 +14,7 @@ exports.MARKER_START = '<!-- agent-docs:start -->';
 exports.MARKER_END = '<!-- agent-docs:end -->';
 exports.IGNORE = ['.DS_Store', 'settings.local.json'];
 exports.SKIP_IF_EXISTS = [
-    path_1.default.join('docs', 'agent', 'rules', 'projects.md'),
+    path_1.default.join('docs', 'rules', 'projects.md'),
 ];
 function mergeClaude(srcPath, destPath) {
     const srcContent = fs_1.default.readFileSync(srcPath, 'utf8');
