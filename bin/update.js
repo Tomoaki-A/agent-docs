@@ -12,7 +12,7 @@ const fs_1 = __importDefault(require("fs"));
 const path_1 = __importDefault(require("path"));
 exports.MARKER_START = '<!-- agent-docs:start -->';
 exports.MARKER_END = '<!-- agent-docs:end -->';
-exports.IGNORE = ['.DS_Store'];
+exports.IGNORE = ['.DS_Store', 'settings.local.json'];
 exports.SKIP_IF_EXISTS = [
     path_1.default.join('docs', 'agent', 'rules', 'projects.md'),
 ];
@@ -62,7 +62,7 @@ function copyRecursive(srcDir, destDir, destRoot) {
     }
 }
 function run(src, dest) {
-    for (const target of ['docs', 'CLAUDE.md']) {
+    for (const target of ['docs', '.claude', 'CLAUDE.md']) {
         const srcPath = path_1.default.join(src, target);
         const destPath = path_1.default.join(dest, target);
         const stat = fs_1.default.statSync(srcPath);

@@ -3,7 +3,7 @@ import path from 'path'
 
 export const MARKER_START = '<!-- agent-docs:start -->'
 export const MARKER_END = '<!-- agent-docs:end -->'
-export const IGNORE = ['.DS_Store']
+export const IGNORE = ['.DS_Store', 'settings.local.json']
 export const SKIP_IF_EXISTS = [
   path.join('docs', 'agent', 'rules', 'projects.md'),
 ]
@@ -56,7 +56,7 @@ export function copyRecursive(srcDir: string, destDir: string, destRoot: string)
 }
 
 export function run(src: string, dest: string): void {
-  for (const target of ['docs', 'CLAUDE.md']) {
+  for (const target of ['docs', '.claude', 'CLAUDE.md']) {
     const srcPath = path.join(src, target)
     const destPath = path.join(dest, target)
     const stat = fs.statSync(srcPath)
