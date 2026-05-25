@@ -97,6 +97,7 @@ pnpm agent-docs-update
 | `naming.md` | 変数・ファイル・コンポーネントの命名規約 |
 | `structure.md` | ディレクトリ・ファイル構成規約 |
 | `styling.md` | スタイリング規約 |
+| `migration.md` | ORM 共通のマイグレーション規約 |
 | `projects.md` | プロジェクト固有規約（各プロジェクトで追記） |
 
 ### 入出力フォーマット（`docs/formats/`）
