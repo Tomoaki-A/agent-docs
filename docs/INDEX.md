@@ -2,12 +2,14 @@
 
 ## 読む順番
 1. BASE.md
-2. rules/*
-3. projects/*
-4. formats/*
+2. response.md
+3. rules/*
+4. projects/*
+5. formats/*
 
 ## ドキュメント構成
 - 基本方針: ./BASE.md
+- 回答フォーマット: ./response.md
 - コーディング規約: ./rules/coding.md
 - 命名規約: ./rules/naming.md
 - 構成規約: ./rules/structure.md
