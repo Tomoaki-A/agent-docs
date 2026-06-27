@@ -1,16 +1,27 @@
 import fs from 'fs'
 import path from 'path'
 
+/** マネージドセクションの開始マーカー */
 export const MARKER_START = '<!-- agent-docs:start -->'
-export const MARKER_END = '<!-- agent-docs:end -->'
-export const IGNORE = ['.DS_Store', 'settings.local.json']
-export const SKIP_IF_EXISTS: string[] = []
 
+/** マネージドセクションの終了マーカー */
+export const MARKER_END = '<!-- agent-docs:end -->'
+
+/** コピー対象から除外するファイル名のリスト */
+export const IGNORE = ['.DS_Store', 'settings.local.json']
+
+/** コピー先に既に存在する場合にスキップするファイルの相対パスリスト */
+export const SKIP_IF_EXISTS: Array<string> = []
+
+/** コピー先に既に存在する場合にスキップするディレクトリの相対パスリスト */
 export const SKIP_DIRS_IF_EXISTS = [
   path.join('docs', 'projects'),
 ]
 
-export function mergeClaude(srcPath: string, destPath: string): void {
+/**
+ * src の CLAUDE.md のマネージドセクションを dest の CLAUDE.md にマージする
+ */
+export const mergeClaude = (srcPath: string, destPath: string): void => {
   const srcContent = fs.readFileSync(srcPath, 'utf8')
   const srcStart = srcContent.indexOf(MARKER_START)
   const srcEnd = srcContent.indexOf(MARKER_END)
@@ -36,34 +47,41 @@ export function mergeClaude(srcPath: string, destPath: string): void {
   console.log('merged: CLAUDE.md')
 }
 
-export function copyRecursive(srcDir: string, destDir: string, destRoot: string): void {
+/**
+ * srcDir 配下のファイル・ディレクトリを destDir へ再帰的にコピーする
+ */
+export const copyRecursive = (srcDir: string, destDir: string, destRoot: string): void => {
   const entries = fs.readdirSync(srcDir, { withFileTypes: true })
-  for (const entry of entries) {
-    if (IGNORE.includes(entry.name)) continue
-    const srcPath = path.join(srcDir, entry.name)
-    const destPath = path.join(destDir, entry.name)
-    if (entry.isDirectory()) {
-      const relativeDir = path.relative(destRoot, destPath)
-      if (SKIP_DIRS_IF_EXISTS.includes(relativeDir) && fs.existsSync(destPath)) {
-        console.log(`skip (already exists): ${relativeDir}/`)
-        continue
+  Array.from(entries)
+    .filter(entry => !IGNORE.includes(entry.name))
+    .map(entry => {
+      const srcPath = path.join(srcDir, entry.name)
+      const destPath = path.join(destDir, entry.name)
+      if (entry.isDirectory()) {
+        const relativeDir = path.relative(destRoot, destPath)
+        if (SKIP_DIRS_IF_EXISTS.includes(relativeDir) && fs.existsSync(destPath)) {
+          console.log(`skip (already exists): ${relativeDir}/`)
+          return
+        }
+        fs.mkdirSync(destPath, { recursive: true })
+        copyRecursive(srcPath, destPath, destRoot)
+      } else {
+        const relative = path.relative(destRoot, destPath)
+        if (SKIP_IF_EXISTS.includes(relative) && fs.existsSync(destPath)) {
+          console.log(`skip (already exists): ${relative}`)
+          return
+        }
+        fs.copyFileSync(srcPath, destPath)
+        console.log(`copied: ${relative}`)
       }
-      fs.mkdirSync(destPath, { recursive: true })
-      copyRecursive(srcPath, destPath, destRoot)
-    } else {
-      const relative = path.relative(destRoot, destPath)
-      if (SKIP_IF_EXISTS.includes(relative) && fs.existsSync(destPath)) {
-        console.log(`skip (already exists): ${relative}`)
-        continue
-      }
-      fs.copyFileSync(srcPath, destPath)
-      console.log(`copied: ${relative}`)
-    }
-  }
+    })
 }
 
-export function run(src: string, dest: string): void {
-  for (const target of ['docs', '.claude', 'CLAUDE.md']) {
+/**
+ * src ディレクトリから dest ディレクトリへ docs / .claude / CLAUDE.md を同期する
+ */
+export const run = (src: string, dest: string): void => {
+  ['docs', '.claude', 'CLAUDE.md'].map(target => {
     const srcPath = path.join(src, target)
     const destPath = path.join(dest, target)
     const stat = fs.statSync(srcPath)
@@ -76,7 +94,7 @@ export function run(src: string, dest: string): void {
       fs.copyFileSync(srcPath, destPath)
       console.log(`copied: ${target}`)
     }
-  }
+  })
 }
 
 if (require.main === module) {
