@@ -22,7 +22,7 @@ describe('mergeClaude', () => {
     const destPath = path.join(tmpDir, 'CLAUDE.md')
     fs.writeFileSync(srcPath, managed)
 
-    mergeClaude(srcPath, destPath)
+    mergeClaude({ srcPath, destPath })
 
     expect(fs.readFileSync(destPath, 'utf8')).toBe(managed)
   })
@@ -34,7 +34,7 @@ describe('mergeClaude', () => {
     fs.writeFileSync(srcPath, newManaged)
     fs.writeFileSync(destPath, `${MARKER_START}\n## Old Rules\n${MARKER_END}\n\n## User Section\n- custom\n`)
 
-    mergeClaude(srcPath, destPath)
+    mergeClaude({ srcPath, destPath })
 
     const result = fs.readFileSync(destPath, 'utf8')
     expect(result).toContain('## Updated Rules')
@@ -48,7 +48,7 @@ describe('mergeClaude', () => {
     fs.writeFileSync(srcPath, managed)
     fs.writeFileSync(destPath, '## Existing Content\n- something\n')
 
-    mergeClaude(srcPath, destPath)
+    mergeClaude({ srcPath, destPath })
 
     const result = fs.readFileSync(destPath, 'utf8')
     expect(result.startsWith(MARKER_START)).toBe(true)
@@ -66,7 +66,7 @@ describe('copyRecursive', () => {
     fs.writeFileSync(path.join(srcDir, 'sub', 'nested.md'), 'nested')
     fs.mkdirSync(destDir)
 
-    copyRecursive(srcDir, destDir, destDir)
+    copyRecursive({ srcDir, destDir, destRoot: destDir })
 
     expect(fs.existsSync(path.join(destDir, 'file.md'))).toBe(true)
     expect(fs.existsSync(path.join(destDir, 'sub', 'nested.md'))).toBe(true)
@@ -80,7 +80,7 @@ describe('copyRecursive', () => {
     fs.writeFileSync(path.join(srcDir, '.DS_Store'), '')
     fs.writeFileSync(path.join(srcDir, 'keep.md'), 'content')
 
-    copyRecursive(srcDir, destDir, destDir)
+    copyRecursive({ srcDir, destDir, destRoot: destDir })
 
     expect(fs.existsSync(path.join(destDir, '.DS_Store'))).toBe(false)
     expect(fs.existsSync(path.join(destDir, 'keep.md'))).toBe(true)
@@ -98,7 +98,7 @@ describe('copyRecursive', () => {
     fs.writeFileSync(srcFile, 'new content')
     fs.writeFileSync(destFile, 'user content')
 
-    copyRecursive(srcDir, destDir, destDir)
+    copyRecursive({ srcDir, destDir, destRoot: destDir })
 
     expect(fs.readFileSync(destFile, 'utf8')).toBe('user content')
   })
@@ -114,7 +114,7 @@ describe('copyRecursive', () => {
     fs.mkdirSync(destDir)
     fs.writeFileSync(srcFile, 'initial content')
 
-    copyRecursive(srcDir, destDir, destDir)
+    copyRecursive({ srcDir, destDir, destRoot: destDir })
 
     expect(fs.readFileSync(destFile, 'utf8')).toBe('initial content')
   })
