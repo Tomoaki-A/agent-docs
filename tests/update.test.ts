@@ -2,7 +2,7 @@ import { describe, it, expect, beforeEach, afterEach } from 'vitest'
 import fs from 'fs'
 import path from 'path'
 import os from 'os'
-import { mergeClaude, copyRecursive, MARKER_START, MARKER_END, IGNORE, SKIP_IF_EXISTS } from '../src/update'
+import { mergeClaude, copyRecursive, MARKER_START, MARKER_END, IGNORE, SKIP_DIRS_IF_EXISTS } from '../src/update'
 
 let tmpDir: string
 
@@ -86,15 +86,15 @@ describe('copyRecursive', () => {
     expect(fs.existsSync(path.join(destDir, 'keep.md'))).toBe(true)
   })
 
-  it('skips SKIP_IF_EXISTS files when they already exist at destination', () => {
-    const skipFile = SKIP_IF_EXISTS[0]
+  it('skips files under SKIP_DIRS_IF_EXISTS directory when the directory already exists at destination', () => {
+    const skipDir = SKIP_DIRS_IF_EXISTS[0]
     const srcDir = path.join(tmpDir, 'src')
     const destDir = path.join(tmpDir, 'dest')
-    const srcFile = path.join(srcDir, skipFile)
-    const destFile = path.join(destDir, skipFile)
+    const srcFile = path.join(srcDir, skipDir, 'overview.md')
+    const destFile = path.join(destDir, skipDir, 'overview.md')
 
-    fs.mkdirSync(path.dirname(srcFile), { recursive: true })
-    fs.mkdirSync(path.dirname(destFile), { recursive: true })
+    fs.mkdirSync(path.join(srcDir, skipDir), { recursive: true })
+    fs.mkdirSync(path.join(destDir, skipDir), { recursive: true })
     fs.writeFileSync(srcFile, 'new content')
     fs.writeFileSync(destFile, 'user content')
 
@@ -103,15 +103,15 @@ describe('copyRecursive', () => {
     expect(fs.readFileSync(destFile, 'utf8')).toBe('user content')
   })
 
-  it('copies SKIP_IF_EXISTS files when they do not exist at destination', () => {
-    const skipFile = SKIP_IF_EXISTS[0]
+  it('copies files under SKIP_DIRS_IF_EXISTS directory when the directory does not exist at destination', () => {
+    const skipDir = SKIP_DIRS_IF_EXISTS[0]
     const srcDir = path.join(tmpDir, 'src')
     const destDir = path.join(tmpDir, 'dest')
-    const srcFile = path.join(srcDir, skipFile)
-    const destFile = path.join(destDir, skipFile)
+    const srcFile = path.join(srcDir, skipDir, 'overview.md')
+    const destFile = path.join(destDir, skipDir, 'overview.md')
 
-    fs.mkdirSync(path.dirname(srcFile), { recursive: true })
-    fs.mkdirSync(path.dirname(destFile), { recursive: true })
+    fs.mkdirSync(path.join(srcDir, skipDir), { recursive: true })
+    fs.mkdirSync(destDir)
     fs.writeFileSync(srcFile, 'initial content')
 
     copyRecursive(srcDir, destDir, destDir)

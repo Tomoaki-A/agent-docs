@@ -4,8 +4,10 @@ import path from 'path'
 export const MARKER_START = '<!-- agent-docs:start -->'
 export const MARKER_END = '<!-- agent-docs:end -->'
 export const IGNORE = ['.DS_Store', 'settings.local.json']
-export const SKIP_IF_EXISTS = [
-  path.join('docs', 'rules', 'projects.md'),
+export const SKIP_IF_EXISTS: string[] = []
+
+export const SKIP_DIRS_IF_EXISTS = [
+  path.join('docs', 'projects'),
 ]
 
 export function mergeClaude(srcPath: string, destPath: string): void {
@@ -41,6 +43,11 @@ export function copyRecursive(srcDir: string, destDir: string, destRoot: string)
     const srcPath = path.join(srcDir, entry.name)
     const destPath = path.join(destDir, entry.name)
     if (entry.isDirectory()) {
+      const relativeDir = path.relative(destRoot, destPath)
+      if (SKIP_DIRS_IF_EXISTS.includes(relativeDir) && fs.existsSync(destPath)) {
+        console.log(`skip (already exists): ${relativeDir}/`)
+        continue
+      }
       fs.mkdirSync(destPath, { recursive: true })
       copyRecursive(srcPath, destPath, destRoot)
     } else {

@@ -4,7 +4,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.SKIP_IF_EXISTS = exports.IGNORE = exports.MARKER_END = exports.MARKER_START = void 0;
+exports.SKIP_DIRS_IF_EXISTS = exports.SKIP_IF_EXISTS = exports.IGNORE = exports.MARKER_END = exports.MARKER_START = void 0;
 exports.mergeClaude = mergeClaude;
 exports.copyRecursive = copyRecursive;
 exports.run = run;
@@ -13,8 +13,9 @@ const path_1 = __importDefault(require("path"));
 exports.MARKER_START = '<!-- agent-docs:start -->';
 exports.MARKER_END = '<!-- agent-docs:end -->';
 exports.IGNORE = ['.DS_Store', 'settings.local.json'];
-exports.SKIP_IF_EXISTS = [
-    path_1.default.join('docs', 'rules', 'projects.md'),
+exports.SKIP_IF_EXISTS = [];
+exports.SKIP_DIRS_IF_EXISTS = [
+    path_1.default.join('docs', 'projects'),
 ];
 function mergeClaude(srcPath, destPath) {
     const srcContent = fs_1.default.readFileSync(srcPath, 'utf8');
@@ -47,6 +48,11 @@ function copyRecursive(srcDir, destDir, destRoot) {
         const srcPath = path_1.default.join(srcDir, entry.name);
         const destPath = path_1.default.join(destDir, entry.name);
         if (entry.isDirectory()) {
+            const relativeDir = path_1.default.relative(destRoot, destPath);
+            if (exports.SKIP_DIRS_IF_EXISTS.includes(relativeDir) && fs_1.default.existsSync(destPath)) {
+                console.log(`skip (already exists): ${relativeDir}/`);
+                continue;
+            }
             fs_1.default.mkdirSync(destPath, { recursive: true });
             copyRecursive(srcPath, destPath, destRoot);
         }
