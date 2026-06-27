@@ -21,7 +21,7 @@ export const SKIP_DIRS_IF_EXISTS = [
 /**
  * src の CLAUDE.md のマネージドセクションを dest の CLAUDE.md にマージする
  */
-export const mergeClaude = ({ srcPath, destPath }: { srcPath: string; destPath: string }): void => {
+export const mergeClaude = ({ srcPath, destPath }: { srcPath: string; destPath: string }): string => {
   const srcContent = fs.readFileSync(srcPath, 'utf8')
   const srcStart = srcContent.indexOf(MARKER_START)
   const srcEnd = srcContent.indexOf(MARKER_END)
@@ -29,8 +29,7 @@ export const mergeClaude = ({ srcPath, destPath }: { srcPath: string; destPath: 
 
   if (!fs.existsSync(destPath)) {
     fs.writeFileSync(destPath, srcContent)
-    console.log('copied: CLAUDE.md')
-    return
+    return 'copied: CLAUDE.md'
   }
 
   const destContent = fs.readFileSync(destPath, 'utf8')
@@ -44,61 +43,57 @@ export const mergeClaude = ({ srcPath, destPath }: { srcPath: string; destPath: 
   } else {
     fs.writeFileSync(destPath, managedSection + '\n\n' + destContent)
   }
-  console.log('merged: CLAUDE.md')
+  return 'merged: CLAUDE.md'
 }
 
 /**
  * srcDir 配下のファイル・ディレクトリを destDir へ再帰的にコピーする
  */
-export const copyRecursive = ({ srcDir, destDir, destRoot }: { srcDir: string; destDir: string; destRoot: string }): void => {
-  const entries = fs.readdirSync(srcDir, { withFileTypes: true })
-  Array.from(entries)
+export const copyRecursive = ({ srcDir, destDir, destRoot }: { srcDir: string; destDir: string; destRoot: string }): Array<string> => {
+  return Array.from(fs.readdirSync(srcDir, { withFileTypes: true }))
     .filter(entry => !IGNORE.includes(entry.name))
-    .reduce((_acc, entry) => {
+    .flatMap(entry => {
       const srcPath = path.join(srcDir, entry.name)
       const destPath = path.join(destDir, entry.name)
       if (entry.isDirectory()) {
         const relativeDir = path.relative(destRoot, destPath)
         if (SKIP_DIRS_IF_EXISTS.includes(relativeDir) && fs.existsSync(destPath)) {
-          console.log(`skip (already exists): ${relativeDir}/`)
-          return undefined
+          return [`skip (already exists): ${relativeDir}/`]
         }
         fs.mkdirSync(destPath, { recursive: true })
-        copyRecursive({ srcDir: srcPath, destDir: destPath, destRoot })
+        return copyRecursive({ srcDir: srcPath, destDir: destPath, destRoot })
       } else {
         const relative = path.relative(destRoot, destPath)
         if (SKIP_IF_EXISTS.includes(relative) && fs.existsSync(destPath)) {
-          console.log(`skip (already exists): ${relative}`)
-          return undefined
+          return [`skip (already exists): ${relative}`]
         }
         fs.copyFileSync(srcPath, destPath)
-        console.log(`copied: ${relative}`)
+        return [`copied: ${relative}`]
       }
-      return undefined
-    }, undefined as undefined)
+    })
 }
 
 /**
  * src ディレクトリから dest ディレクトリへ docs / .claude / CLAUDE.md を同期する
  */
-export const run = ({ src, dest }: { src: string; dest: string }): void => {
-  ['docs', '.claude', 'CLAUDE.md'].reduce((_acc, target) => {
+export const run = ({ src, dest }: { src: string; dest: string }): Array<string> => {
+  return ['docs', '.claude', 'CLAUDE.md'].flatMap(target => {
     const srcPath = path.join(src, target)
     const destPath = path.join(dest, target)
     const stat = fs.statSync(srcPath)
     if (stat.isDirectory()) {
       fs.mkdirSync(destPath, { recursive: true })
-      copyRecursive({ srcDir: srcPath, destDir: destPath, destRoot: dest })
+      return copyRecursive({ srcDir: srcPath, destDir: destPath, destRoot: dest })
     } else if (target === 'CLAUDE.md') {
-      mergeClaude({ srcPath, destPath })
+      return [mergeClaude({ srcPath, destPath })]
     } else {
       fs.copyFileSync(srcPath, destPath)
-      console.log(`copied: ${target}`)
+      return [`copied: ${target}`]
     }
-    return undefined
-  }, undefined as undefined)
+  })
 }
 
 if (require.main === module) {
-  run({ src: path.join(__dirname, '..'), dest: process.cwd() })
+  const messages = run({ src: path.join(__dirname, '..'), dest: process.cwd() })
+  console.log(messages.join('\n'))
 }
